@@ -9,17 +9,49 @@ const adapterConfig = {
   mongoUri: process.env.MONGO_URI,
 };
 
+// @desc authenticate user
+const isLoggedIn = ({ authentication: { item: user } }) => {
+  return !!user;
+};
+
+// @desc authenticate user type
+const isAdmin = ({ authentication: { item: user } }) => {
+  return !!user && !!user.isAdmin;
+};
+
+// Mongoose schemas
 const PostSchema = require('./lists/Post');
 const UserSchema = require('./lists/User');
 
+// init keystone with adapter
 const keystone = new Keystone({
   adapter: new Adapter(adapterConfig),
   cookieSecret: process.env.COOKIE_SECRET,
 });
 
-keystone.createList('Post', PostSchema);
-keystone.createList('User', UserSchema);
+// Posts API access control
+keystone.createList('Post', {
+  fields: PostSchema.fields,
+  access: {
+    read: true,
+    create: isLoggedIn,
+    update: isLoggedIn,
+    delete: isLoggedIn,
+  },
+});
 
+// Users API access control
+keystone.createList('User', {
+  fields: UserSchema.fields,
+  access: {
+    read: true,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+  },
+});
+
+// Restricting admin area
 const authStrategy = keystone.createAuthStrategy({
   type: PasswordAuthStrategy,
   list: 'User',
@@ -37,6 +69,7 @@ module.exports = {
       name: PROJECT_NAME,
       enableDefaultRoute: true,
       authStrategy,
+      isAccessAllowed: isAdmin,
     }),
   ],
 };
