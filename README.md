@@ -1,15 +1,19 @@
-# KeystoneJS Blank Starter Template
+# Keystone Blog
 
-You've created a KeystoneJS project! This project contains an AdminUI and GraphQL App.
+Blog API created with KeystoneJS
 
-You probably want to add Lists, Authentication, Access control and a front-end application.
+Rename config.env to .env and add your database URI
 
 ## Running the Project.
 
-To run this project first run `npm install`. Note: If you generated this project via the Keystone cli step this has been done for you \\o/.
+Install dependencies with `npm install`
 
-Once running the Keystone Admin UI is reachable via: `localhost:3000/admin`.
+Run `npm run dev`
+
+- Admin UI - `http://localhost:5000/admin`
+- Graphiql Client - `http://localhost:5000/admin/graphql`
+- API Endpoint - `http://localhost:5000/admin/api`
 
 ## Next steps
 
-This example has no front-end application but you can build your own using the GraphQL API (`http://localhost:3000/admin/graphiql`).
+This example has no front-end application but you can build your own using the GraphQL API (`http://localhost:5000/admin/graphiql`).
